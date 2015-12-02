@@ -70,11 +70,11 @@ class Chef
     end
 
     def chef_server_rest
-      @chef_server_rest ||= Chef::REST.new(Chef::Config[:chef_server_url])
+      @chef_server_rest ||= Chef::ServerAPI.new(Chef::Config[:chef_server_url])
     end
 
     def self.chef_server_rest
-      Chef::REST.new(Chef::Config[:chef_server_url])
+      Chef::ServerAPI.new(Chef::Config[:chef_server_url])
     end
 
     # Create a Chef::Role from JSON
@@ -104,7 +104,7 @@ class Chef
             response
           end
         else
-          Chef::REST.new(Chef::Config[:chef_server_url]).get_rest("data")
+          Chef::ServerAPI.new(Chef::Config[:chef_server_url]).get("data")
         end
       end
     end
@@ -120,7 +120,7 @@ class Chef
           end
 
           Dir.glob(File.join(Chef::Util::PathHelper.escape_glob(path, name.to_s), "*.json")).inject({}) do |bag, f|
-            item = Chef::JSONCompat.from_json(IO.read(f))
+            item = Chef::JSONCompat.parse(IO.read(f))
 
             # Check if we have multiple items with similar names (ids) and raise if their content differs
             if data_bag.has_key?(item["id"]) && data_bag[item["id"]] != item
@@ -132,12 +132,12 @@ class Chef
         end
         return data_bag
       else
-        Chef::REST.new(Chef::Config[:chef_server_url]).get_rest("data/#{name}")
+        Chef::ServerAPI.new(Chef::Config[:chef_server_url]).get("data/#{name}")
       end
     end
 
     def destroy
-      chef_server_rest.delete_rest("data/#{@name}")
+      chef_server_rest.delete("data/#{@name}")
     end
 
     # Save the Data Bag via RESTful API
@@ -156,7 +156,7 @@ class Chef
 
     #create a data bag via RESTful API
     def create
-      chef_server_rest.post_rest("data", self)
+      chef_server_rest.post("data", self)
       self
     end
 
