@@ -58,11 +58,11 @@ class Chef
     end
 
     def chef_server_rest
-      @chef_server_rest ||= Chef::REST.new(Chef::Config[:chef_server_url])
+      @chef_server_rest ||= Chef::ServerAPI.new(Chef::Config[:chef_server_url])
     end
 
     def self.chef_server_rest
-      Chef::REST.new(Chef::Config[:chef_server_url])
+      Chef::ServerAPI.new(Chef::Config[:chef_server_url])
     end
 
     def raw_data
@@ -149,7 +149,7 @@ class Chef
         bag = Chef::DataBag.load(data_bag)
         item = bag[name]
       else
-        item = Chef::REST.new(Chef::Config[:chef_server_url]).get_rest("data/#{data_bag}/#{name}")
+        item = Chef::ServerAPI.new(Chef::Config[:chef_server_url]).get("data/#{data_bag}/#{name}")
       end
 
       if item.kind_of?(DataBagItem)
@@ -162,7 +162,7 @@ class Chef
     end
 
     def destroy(data_bag=data_bag(), databag_item=name)
-      chef_server_rest.delete_rest("data/#{data_bag}/#{databag_item}")
+      chef_server_rest.delete("data/#{data_bag}/#{databag_item}")
     end
 
     # Save this Data Bag Item via RESTful API
@@ -172,18 +172,18 @@ class Chef
         if Chef::Config[:why_run]
           Chef::Log.warn("In why-run mode, so NOT performing data bag item save.")
         else
-          r.put_rest("data/#{data_bag}/#{item_id}", self)
+          r.put("data/#{data_bag}/#{item_id}", self)
         end
       rescue Net::HTTPServerException => e
         raise e unless e.response.code == "404"
-        r.post_rest("data/#{data_bag}", self)
+        r.post("data/#{data_bag}", self)
       end
       self
     end
 
     # Create this Data Bag Item via RESTful API
     def create
-      chef_server_rest.post_rest("data/#{data_bag}", self)
+      chef_server_rest.post("data/#{data_bag}", self)
       self
     end
 
