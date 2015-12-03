@@ -31,6 +31,7 @@ class Chef
       options[:client_name] ||= Chef::Config[:node_name]
       options[:signing_key_filename] ||= Chef::Config[:client_key]
       options[:signing_key_filename] = nil if chef_zero_uri?(url)
+      options[:inflate_json_class] = false
       super(url, options)
     end
 
