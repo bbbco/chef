@@ -372,9 +372,9 @@ describe Chef::Client do
       test_env = Chef::Environment.new
       test_env.name("A")
 
-      mock_chef_rest = double("Chef::REST")
-      expect(mock_chef_rest).to receive(:get_rest).with("environments/A").and_return(test_env)
-      expect(Chef::REST).to receive(:new).and_return(mock_chef_rest)
+      mock_chef_rest = double("Chef::ServerAPI")
+      expect(mock_chef_rest).to receive(:get).with("environments/A").and_return(test_env)
+      expect(Chef::ServerAPI).to receive(:new).and_return(mock_chef_rest)
       allow(client.policy_builder).to receive(:node).and_return(node)
       client.policy_builder.select_implementation(node)
       allow(client.policy_builder.implementation).to receive(:node).and_return(node)
