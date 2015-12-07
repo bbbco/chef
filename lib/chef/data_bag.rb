@@ -24,6 +24,7 @@ require 'chef/mixin/from_file'
 require 'chef/data_bag_item'
 require 'chef/mash'
 require 'chef/json_compat'
+require 'chef/server_api'
 
 class Chef
   class DataBag

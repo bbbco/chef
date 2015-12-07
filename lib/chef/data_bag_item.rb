@@ -25,6 +25,7 @@ require 'chef/mixin/params_validate'
 require 'chef/mixin/from_file'
 require 'chef/data_bag'
 require 'chef/mash'
+require 'chef/server_api'
 require 'chef/json_compat'
 
 class Chef
