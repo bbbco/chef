@@ -19,7 +19,7 @@
 require 'spec_helper'
 require 'ostruct'
 
-describe Chef::Node, :focus do
+describe Chef::Node do
 
   let(:node) { Chef::Node.new() }
   let(:platform_introspector) { node }
