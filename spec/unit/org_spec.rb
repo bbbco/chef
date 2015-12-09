@@ -136,7 +136,7 @@ describe Chef::Org do
     let(:rest) do
       Chef::Config[:chef_server_root] = "http://www.example.com"
       r = double('rest')
-      allow(Chef::REST).to receive(:new).and_return(r)
+      allow(Chef::ServerAPI).to receive(:new).and_return(r)
       r
     end
 

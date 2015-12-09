@@ -18,7 +18,7 @@
 
 require 'chef/json_compat'
 require 'chef/mixin/params_validate'
-require 'chef/rest'
+require 'chef/server_api'
 
 class Chef
   class Org
@@ -35,7 +35,7 @@ class Chef
     end
 
     def chef_rest
-      @chef_rest ||= Chef::REST.new(Chef::Config[:chef_server_root])
+      @chef_rest ||= Chef::ServerAPI.new(Chef::Config[:chef_server_root])
     end
 
     def name(arg=nil)
@@ -129,12 +129,12 @@ class Chef
     end
 
     def self.load(org_name)
-      response =  Chef::REST.new(Chef::Config[:chef_server_root]).get_rest("organizations/#{org_name}")
+      response =  Chef::ServerAPI.new(Chef::Config[:chef_server_root]).get_rest("organizations/#{org_name}")
       Chef::Org.from_hash(response)
     end
 
     def self.list(inflate=false)
-      orgs = Chef::REST.new(Chef::Config[:chef_server_root]).get_rest('organizations')
+      orgs = Chef::ServerAPI.new(Chef::Config[:chef_server_root]).get_rest('organizations')
       if inflate
         orgs.inject({}) do |org_map, (name, _url)|
           org_map[name] = Chef::Org.load(name)
