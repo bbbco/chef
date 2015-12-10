@@ -217,6 +217,10 @@ class Chef
     end
 
     def self.json_create(o)
+      from_hash(o)
+    end
+
+    def self.from_hash(o)
       environment = new
       environment.name(o["name"])
       environment.description(o["description"])

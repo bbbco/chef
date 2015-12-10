@@ -532,10 +532,11 @@ class Chef
 
     # Create a Chef::Node from JSON
     def self.json_create(o)
-      parse(o)
+      from_hash(o)
     end
 
-    def self.parse(o)
+    def self.from_hash(o)
+      return o if o.kind_of? Chef::Node
       node = new
       node.name(o["name"])
       node.chef_environment(o["chef_environment"])
@@ -573,6 +574,7 @@ class Chef
       if inflate
         response = Hash.new
         Chef::Search::Query.new.search(:node) do |n|
+          n = Chef::Node.from_hash(n)
           response[n.name] = n unless n.nil?
         end
         response
@@ -598,7 +600,7 @@ class Chef
 
     # Load a node by name
     def self.load(name)
-      parse(Chef::ServerAPI.new(Chef::Config[:chef_server_url]).get("nodes/#{name}"))
+      from_hash(Chef::ServerAPI.new(Chef::Config[:chef_server_url]).get("nodes/#{name}"))
     end
 
     # Remove this node via the REST API

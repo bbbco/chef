@@ -218,7 +218,7 @@ class Chef
       end
 
       def fetch_role(name, included_by)
-        Chef::Role.parse(rest.get("roles/#{name}"))
+        Chef::Role.from_hash(rest.get("roles/#{name}"))
       rescue Net::HTTPServerException => e
         if e.message == '404 "Not Found"'
           role_not_found(name, included_by)

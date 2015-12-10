@@ -171,10 +171,10 @@ class Chef
 
     # Create a Chef::Role from JSON
     def self.json_create(o)
-      parse(o)
+      from_hash(o)
     end
 
-    def self.parse(o)
+    def self.from_hash(o)
       role = new
       role.name(o["name"])
       role.description(o["description"])
@@ -210,7 +210,7 @@ class Chef
 
     # Load a role by name from the API
     def self.load(name)
-      parse(chef_server_rest.get("roles/#{name}"))
+      from_hash(chef_server_rest.get("roles/#{name}"))
     end
 
     def environment(env_name)
@@ -263,8 +263,8 @@ class Chef
 
         if js_path && File.exists?(js_path)
           # from_json returns object.class => json_class in the JSON.
-          json = Chef::JSONCompat.parse(IO.read(js_path))
-          return parse(json)
+          hsh = Chef::JSONCompat.parse(IO.read(js_path))
+          return from_hash(hsh)
         elsif rb_path && File.exists?(rb_path)
           role = Chef::Role.new
           role.name(name)

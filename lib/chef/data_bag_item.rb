@@ -126,22 +126,23 @@ class Chef
     end
 
     def self.from_hash(h)
+      h.delete("chef_type")
+      h.delete("json_class")
+      h.delete("name")
+
       item = new
-      item.raw_data = h
+      item.data_bag(h.delete("data_bag")) if h.key?("data_bag")
+      if h.key?("raw_data")
+        item.raw_data = Mash.new(h["raw_data"])
+      else
+        item.raw_data = h
+      end
       item
     end
 
     # Create a Chef::DataBagItem from JSON
     def self.json_create(o)
-      bag_item = new
-      bag_item.data_bag(o["data_bag"])
-      o.delete("data_bag")
-      o.delete("chef_type")
-      o.delete("json_class")
-      o.delete("name")
-
-      bag_item.raw_data = Mash.new(o["raw_data"])
-      bag_item
+      from_hash(o)
     end
 
     # Load a Data Bag Item by name via either the RESTful API or local data_bag_path if run in solo mode

@@ -177,27 +177,27 @@ describe Chef::Search::Query do
     end
 
     it "queries for every object of a type by default" do
-      expect(rest).to receive(:get_rest).with("search/node?q=*:*&sort=X_CHEF_id_CHEF_X%20asc&start=0").and_return(response)
+      expect(rest).to receive(:get).with("search/node?q=*:*&sort=X_CHEF_id_CHEF_X%20asc&start=0").and_return(response)
       query.search(:node)
     end
 
     it "allows a custom query" do
-      expect(rest).to receive(:get_rest).with("search/node?q=platform:rhel&sort=X_CHEF_id_CHEF_X%20asc&start=0").and_return(response)
+      expect(rest).to receive(:get).with("search/node?q=platform:rhel&sort=X_CHEF_id_CHEF_X%20asc&start=0").and_return(response)
       query.search(:node, "platform:rhel")
     end
 
     it "lets you set a sort order" do
-      expect(rest).to receive(:get_rest).with("search/node?q=platform:rhel&sort=id%20desc&start=0").and_return(response)
+      expect(rest).to receive(:get).with("search/node?q=platform:rhel&sort=id%20desc&start=0").and_return(response)
       query.search(:node, "platform:rhel", sort: "id desc")
     end
 
     it "lets you set a starting object" do
-      expect(rest).to receive(:get_rest).with("search/node?q=platform:rhel&sort=X_CHEF_id_CHEF_X%20asc&start=2").and_return(response)
+      expect(rest).to receive(:get).with("search/node?q=platform:rhel&sort=X_CHEF_id_CHEF_X%20asc&start=2").and_return(response)
       query.search(:node, "platform:rhel", start: 2)
     end
 
     it "lets you set how many rows to return" do
-      expect(rest).to receive(:get_rest).with("search/node?q=platform:rhel&sort=X_CHEF_id_CHEF_X%20asc&start=0&rows=40").and_return(response)
+      expect(rest).to receive(:get).with("search/node?q=platform:rhel&sort=X_CHEF_id_CHEF_X%20asc&start=0&rows=40").and_return(response)
       query.search(:node, "platform:rhel", rows: 40)
     end
 
@@ -226,16 +226,16 @@ describe Chef::Search::Query do
     end
 
     it "sends multiple API requests when the server indicates there is more data" do
-      expect(rest).to receive(:get_rest).with(query_string).and_return(big_response)
-      expect(rest).to receive(:get_rest).with(query_string_continue).and_return(big_response_end)
+      expect(rest).to receive(:get).with(query_string).and_return(big_response)
+      expect(rest).to receive(:get).with(query_string_continue).and_return(big_response_end)
       query.search(:node, "platform:rhel") do |r|
         nil
       end
     end
 
     it "paginates correctly in the face of filtered nodes" do
-      expect(rest).to receive(:get_rest).with(query_string_with_rows).and_return(big_response_empty)
-      expect(rest).to receive(:get_rest).with(query_string_continue_with_rows).and_return(big_response_end)
+      expect(rest).to receive(:get).with(query_string_with_rows).and_return(big_response_empty)
+      expect(rest).to receive(:get).with(query_string_continue_with_rows).and_return(big_response_end)
       query.search(:node, "platform:rhel", rows: 4) do |r|
         nil
       end

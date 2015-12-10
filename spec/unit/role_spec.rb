@@ -229,7 +229,7 @@ describe Chef::Role do
       @role.run_list('one', 'two', 'role[a]')
       @role.default_attributes({ 'el_groupo' => 'nuevo' })
       @role.override_attributes({ 'deloused' => 'in the comatorium' })
-      @deserial = Chef::Role.parse(Chef::JSONCompat.parse(Chef::JSONCompat.to_json(@role)))
+      @deserial = Chef::Role.from_hash(Chef::JSONCompat.parse(Chef::JSONCompat.to_json(@role)))
     end
 
     it "should deserialize to a Chef::Role object" do

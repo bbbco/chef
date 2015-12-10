@@ -80,6 +80,10 @@ class Chef
 
     # Create a Chef::Role from JSON
     def self.json_create(o)
+      from_hash(o)
+    end
+
+    def self.from_hash(o)
       bag = new
       bag.name(o["name"])
       bag
