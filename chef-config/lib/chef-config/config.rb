@@ -27,6 +27,7 @@ require 'chef-config/windows'
 require 'chef-config/path_helper'
 require 'mixlib/shellout'
 require 'uri'
+require 'openssl'
 
 module ChefConfig
 
@@ -444,8 +445,14 @@ module ChefConfig
 
     # Sets the version of the signed header authentication protocol to use (see
     # the 'mixlib-authorization' project for more detail). Currently, versions
-    # 1.0 and 1.1 are available.
-    default :authentication_protocol_version, "1.1"
+    # 1.0, 1.1, and 1.3 are available.
+    default :authentication_protocol_version do
+      if OpenSSL::OPENSSL_FIPS
+        "1.3"
+      else
+        "1.1"
+      end
+    end
 
     # This key will be used to sign requests to the Chef server. This location
     # must be writable by Chef during initial setup when generating a client
