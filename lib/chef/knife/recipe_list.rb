@@ -22,7 +22,7 @@ class Chef::Knife::RecipeList < Chef::Knife
   banner "knife recipe list [PATTERN]"
 
   def run
-    recipes = rest.get_rest('cookbooks/_recipes')
+    recipes = rest.get('cookbooks/_recipes')
     if pattern = @name_args.first
       recipes = recipes.grep(Regexp.new(pattern))
     end
