@@ -1,5 +1,6 @@
 require 'chef/client'
 require 'chef/util/threaded_job_queue'
+require 'chef/server_api'
 require 'singleton'
 
 class Chef
