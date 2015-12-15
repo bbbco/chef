@@ -201,7 +201,7 @@ class Chef
                                            {:run_list => @expanded_run_list_with_versions})
 
           cookbook_hash = cookbook_hash.inject({}) do |memo, (key, value)|
-            memo[key] = Chef::CookbookVersion.parse(value)
+            memo[key] = Chef::CookbookVersion.from_hash(value)
             memo
           end
         rescue Exception => e

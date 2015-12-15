@@ -460,7 +460,7 @@ class Chef
     end
     private :preferences_for_path
 
-    def self.parse(o)
+    def self.from_hash(o)
       cookbook_version = new(o["cookbook_name"] || o["name"])
 
       # We want the Chef::Cookbook::Metadata object to always be inflated
@@ -476,11 +476,11 @@ class Chef
     end
 
     def self.json_create(o)
-      parse(o)
+      from_hash(o)
     end
 
     def self.from_cb_artifact_data(o)
-      parse(o)
+      from_hash(o)
     end
 
     # @deprecated This method was used by the Ruby Chef Server and is no longer
@@ -555,7 +555,7 @@ class Chef
 
     def self.load(name, version="_latest")
       version = "_latest" if version == "latest"
-      parse(chef_server_rest.get("cookbooks/#{name}/#{version}"))
+      from_hash(chef_server_rest.get("cookbooks/#{name}/#{version}"))
     end
 
     # The API returns only a single version of each cookbook in the result from the cookbooks method
