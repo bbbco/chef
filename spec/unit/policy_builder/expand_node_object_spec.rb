@@ -290,7 +290,7 @@ describe Chef::PolicyBuilder::ExpandNodeObject do
       node
     end
 
-    let(:chef_http) { double("Chef::REST") }
+    let(:chef_http) { double("Chef::ServerAPI") }
 
     let(:cookbook_resolve_url) { "environments/#{node.chef_environment}/cookbook_versions" }
     let(:cookbook_resolve_post_data) { {:run_list=>["first::default", "second::default"]} }
